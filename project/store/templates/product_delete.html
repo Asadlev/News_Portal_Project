@@ -1,0 +1,25 @@
+{% extends 'store/default.html' %}
+
+
+{% block content %}
+<h1>Удаление товара</h1>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>Удаляем "{{ object.name }}"?</p>
+    <input type="submit" value="Delete"/>
+</form>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

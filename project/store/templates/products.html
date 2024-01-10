@@ -1,0 +1,128 @@
+{% extends 'store/default.html' %}
+<!-- Фильтры -->
+{% load custom_filters %}
+
+<!-- Теги -->
+{% load custom_tags %}
+
+{% block title %}
+Products
+{% endblock title %}
+
+
+{% block content %}
+    <h1>Онлайн магазин</h1>
+    <h3>Дата: {% time '%b %d %Y' %}</h3>
+        <h1>Все товары</h1>
+
+<!--        {# Добавляем форму, которая объединяет набор полей,-->
+<!--        которые будут отправляться в запросе #}-->
+        <form action="" method="get">
+<!--            {# Переменная, которую мы передали через контекст,-->
+<!--            может сгенерировать нам форму с полями #}-->
+            {{ filterset.form.as_p }}
+<!--            {# Добавим кнопку отправки данных формы #}-->
+            <input type="submit" value="Поиск" />
+        </form>
+
+
+    <!--<h3>{{ time_now|date:'M d Y' }}</h3>-->
+   <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
+
+   <hr>
+   {% if products %}
+       <table>
+           <tr>
+               <td><h5> Название </h5></td>
+          <td><h5> Описание </h5></td>
+               <td><h5> Категория </h5></td>
+               <td><h5> Цена </h5></td>
+             <td><h5> Количество </h5></td>
+
+           </tr>
+
+           {% for product in products %}
+           <tr>
+               <td>{{ product.name }}</td>
+               <td>{{ product.discription|truncatewords:2 }}</td>
+               <td>{{ product.category.name }}</td>
+               <!-- Используем наш фильтр -->
+               <td>{{ product.price|currency:"usd" }}</td>
+               <td>{{ product.quanity|my_filter }}</td>
+
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Товаров нет!</h2>
+   {% endif %}
+
+{# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+<!--        -->
+<!--        <tr>-->
+<!--    <th><label for="id_name">Name:</label></th>-->
+<!--    <td>-->
+
+<!--      <input type="text" name="name" value="test" maxlength="50" required id="id_name">-->
+
+
+<!--    </td>-->
+<!--  </tr>-->
+
+<!--  <tr>-->
+<!--    <th><label for="id_discription">Discription:</label></th>-->
+<!--    <td>-->
+
+<!--      <textarea name="discription" cols="40" rows="10" maxlength="255" required id="id_discription">-->
+<!--test</textarea>-->
+<!--        -->
+<!--    </td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <th><label for="id_quanity">Quanity:</label></th>-->
+<!--    <td>-->
+<!--      <input type="number" name="quanity" value="1" required id="id_quanity">-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <th><label for="id_category">Category:</label></th>-->
+<!--    <td>-->
+<!--      <select name="category" required id="id_category">-->
+<!--  <option value="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+<!--  <option value="1" selected>Shoes</option>-->
+<!--</select>-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--  <tr>-->
+<!--    <th><label for="id_price">Price:</label></th>-->
+<!--    <td>-->
+<!--      <input type="number" name="price" value="42" step="any" required id="id_price">-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--    -->
+
+
+{% endblock %}

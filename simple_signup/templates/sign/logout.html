@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h2> Вы вышли из системы </h2>
+<h1> Досвидание! </h1>
+
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<input type="submit" value="Войти обратно в систему">
+</form>
+
+{% endblock %}
